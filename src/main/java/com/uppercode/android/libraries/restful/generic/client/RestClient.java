@@ -3,7 +3,6 @@ package com.uppercode.android.libraries.restful.generic.client;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.http.HttpAuthentication;
 import org.springframework.http.HttpBasicAuthentication;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -14,47 +13,49 @@ import org.springframework.web.client.RestTemplate;
 
 public class RestClient {
 
-	private RestTemplate rest;
-	private HttpAuthentication authHeader;
+	private RestTemplate mRest;
+	private HttpHeaders mHeaders;
 
 	public RestClient() {
-		rest = new RestTemplate();
-		rest.getMessageConverters().add(new StringHttpMessageConverter());
+		mRest = new RestTemplate();
+		mRest.getMessageConverters().add(new StringHttpMessageConverter());
+
+		initializeHeaders();
 	}
 
 	public void setBasicAuthentication(String user, String pass) {
-		authHeader = new HttpBasicAuthentication(user, pass);
+		mHeaders.setAuthorization(new HttpBasicAuthentication(user, pass));
 	}
 
 	public String get(String url) {
-		return rest.exchange(url, HttpMethod.GET, new HttpEntity<String>(getHeaders()),
-				String.class).getBody();
+		return mRest.exchange(url, HttpMethod.GET, entity(null), String.class).getBody();
 	}
 
 	public String post(String url, String json) {
-		return rest.exchange(url, HttpMethod.POST, new HttpEntity<String>(json, getHeaders()),
-				String.class).getBody();
+		return mRest.exchange(url, HttpMethod.POST, entity(json), String.class).getBody();
 	}
 
 	public String put(String url, String json) {
-		return rest.exchange(url, HttpMethod.PUT, new HttpEntity<String>(json, getHeaders()),
-				String.class).getBody();
+		return mRest.exchange(url, HttpMethod.PUT, entity(json), String.class).getBody();
 	}
 
-	private HttpHeaders getHeaders() {
+	public String delete(String url) {
+		return mRest.exchange(url, HttpMethod.DELETE, entity(null), String.class).getBody();
+	}
+
+	private HttpEntity<String> entity(String json) {
+		if (json == null) {
+			return new HttpEntity<String>(mHeaders);
+		}
+		return new HttpEntity<String>(json, mHeaders);
+	}
+
+	private void initializeHeaders() {
 		List<MediaType> acceptableMediaTypes = new ArrayList<MediaType>();
 		acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
 
-		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(acceptableMediaTypes);
-		headers.setContentType(MediaType.APPLICATION_JSON);
-
-		headers.add("Accept", "application/json");
-
-		if (authHeader != null) {
-			headers.setAuthorization(authHeader);
-		}
-
-		return headers;
+		mHeaders = new HttpHeaders();
+		mHeaders.setAccept(acceptableMediaTypes);
+		mHeaders.setContentType(MediaType.APPLICATION_JSON);
 	}
 }
