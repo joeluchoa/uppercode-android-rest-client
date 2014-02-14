@@ -1,0 +1,2 @@
+uppercode-android-rest-client
+=============================
