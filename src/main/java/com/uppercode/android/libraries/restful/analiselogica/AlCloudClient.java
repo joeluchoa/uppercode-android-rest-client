@@ -46,7 +46,7 @@ public class AlCloudClient {
 
 	public String getAll() {
 		if (checkCredentials()) {
-			return mRestClient.get(mGetAllPath);
+			return mRestClient.get(url(mGetAllPath));
 		}
 		return null;
 	}
