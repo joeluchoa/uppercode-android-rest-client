@@ -8,16 +8,23 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
 public class RestClient {
+
+	private static final int TIMEOUT = 15 * 60 * 1000;
 
 	private RestTemplate mRest;
 	private HttpHeaders mHeaders;
 
 	public RestClient() {
 		mRest = new RestTemplate();
+		HttpComponentsClientHttpRequestFactory f = new HttpComponentsClientHttpRequestFactory();
+		f.setConnectTimeout(TIMEOUT);
+		f.setReadTimeout(TIMEOUT);
+		mRest.setRequestFactory(f);
 		mRest.getMessageConverters().add(new StringHttpMessageConverter());
 
 		initializeHeaders();
