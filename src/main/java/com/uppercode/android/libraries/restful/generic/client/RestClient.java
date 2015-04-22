@@ -68,6 +68,6 @@ public class RestClient {
 		mHeaders = new HttpHeaders();
 		mHeaders.setAccept(acceptableMediaTypes);
 		mHeaders.setContentType(MediaType.APPLICATION_JSON);
-		mHeaders.add("Accept-Encoding", "gzip");
+		// mHeaders.add("Accept-Encoding", "gzip");
 	}
 }
