@@ -35,19 +35,23 @@ public class RestClient {
 	}
 
 	public String get(String url) {
-		return mRest.exchange(url, HttpMethod.GET, entity(null), String.class).getBody();
+		return mRest.exchange(url, HttpMethod.GET, entity(null), String.class)
+				.getBody();
 	}
 
 	public String post(String url, String json) {
-		return mRest.exchange(url, HttpMethod.POST, entity(json), String.class).getBody();
+		return mRest.exchange(url, HttpMethod.POST, entity(json), String.class)
+				.getBody();
 	}
 
 	public String put(String url, String json) {
-		return mRest.exchange(url, HttpMethod.PUT, entity(json), String.class).getBody();
+		return mRest.exchange(url, HttpMethod.PUT, entity(json), String.class)
+				.getBody();
 	}
 
 	public String delete(String url) {
-		return mRest.exchange(url, HttpMethod.DELETE, entity(null), String.class).getBody();
+		return mRest.exchange(url, HttpMethod.DELETE, entity(null),
+				String.class).getBody();
 	}
 
 	private HttpEntity<String> entity(String json) {
@@ -64,5 +68,6 @@ public class RestClient {
 		mHeaders = new HttpHeaders();
 		mHeaders.setAccept(acceptableMediaTypes);
 		mHeaders.setContentType(MediaType.APPLICATION_JSON);
+		mHeaders.add("Accept-Encoding", "gzip");
 	}
 }
